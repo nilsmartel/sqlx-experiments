@@ -15,7 +15,7 @@ async fn main() -> Result<(), sqlx::Error> {
     }
 
     let corpus = args[0].clone();
-    let limit = args[0]
+    let limit = args[1]
         .parse::<i64>()
         .expect("second argument to be positive integer");
 
