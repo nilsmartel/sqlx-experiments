@@ -1,12 +1,9 @@
 mod db;
 
 use sqlx::postgres::PgPoolOptions;
-// use sqlx::mysql::MySqlPoolOptions;
-// etc.
+use tokio_stream::StreamExt;
 
 #[tokio::main]
-// or #[tokio::main]
-// or #[actix_web::main]
 async fn main() -> Result<(), sqlx::Error> {
     let args = std::env::args().skip(1).collect::<Vec<String>>();
     if args.len() != 2 {
@@ -28,16 +25,22 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect(&db::client_str())
         .await?;
 
-    let row: (String,) = sqlx::query_as(&format!(
+    let query = format!(
         "SELECT tokenized
             FROM {corpus}
             ORDER BY tokenized
             LIMIT {limit}"
-    ))
-    .fetch_one(&pool)
-    .await?;
+    );
+    let query = sqlx::query_as::<_, (String,)>(&query);
 
-    dbg!(&row);
+    let mut stream = query.fetch(&pool);
+
+    while let Some(row) = stream.try_next().await? {
+            dbg!(row);
+    }
+
+    // let row: (String,) = query.fetch_one(&pool).await?;
+    // dbg!(&row);
 
     Ok(())
 }
