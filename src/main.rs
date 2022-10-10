@@ -1,5 +1,5 @@
 mod db;
-use std::io::*;
+use std::io::prelude::*;
 
 use sqlx::postgres::PgPoolOptions;
 use tokio_stream::StreamExt;
@@ -43,10 +43,10 @@ async fn main() -> Result<(), sqlx::Error> {
 
     let mut stream = query.fetch(&pool);
 
-    let stdin = std::io::stdin();
-    let mut out = stdin.lock();
+    let stdout = std::io::stdout();
+    let mut out = stdout.lock();
     while let Some(row) = stream.try_next().await? {
-        writeln!(&mut out, "{}", row.0);
+        writeln!(&mut out, "{}", row.0).unwrap();
     }
 
     Ok(())
