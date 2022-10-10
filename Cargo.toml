@@ -1,5 +1,5 @@
 [package]
-name = "sqlx-experiments"
+name = "table-to-file-2"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,3 +11,5 @@ tokio = { version = "1", features = ["full"] }
 
 tokio-stream = "0.1.10"          # Utilities to work with `Stream` and `tokio`.
 structopt = "0.3.26"               # Parse command line argument by defining a struct.
+
+bintable = { path = "../bintable" }
