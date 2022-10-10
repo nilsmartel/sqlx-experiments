@@ -46,7 +46,7 @@ async fn main() -> Result<(), sqlx::Error> {
     let stdout = std::io::stdout();
     let mut out = stdout.lock();
     while let Some(row) = stream.try_next().await? {
-        writeln!(&mut out, "{}", row.0).unwrap();
+        writeln!(&mut out, "'{}'", row.0).unwrap();
     }
 
     Ok(())
