@@ -28,9 +28,14 @@ async fn main() -> Result<(), sqlx::Error> {
         .connect(&db::client_str())
         .await?;
 
-    let row: (String,) = sqlx::query_as(&format!("SELECT tokenized FROM {corpus} LIMIT {limit}"))
-        .fetch_one(&pool)
-        .await?;
+    let row: (String,) = sqlx::query_as(&format!(
+        "SELECT tokenized
+            FROM {corpus}
+            ORDER BY tokenized
+            LIMIT {limit}"
+    ))
+    .fetch_one(&pool)
+    .await?;
 
     dbg!(&row);
 
