@@ -1,5 +1,7 @@
+use std::env::VarError;
+
 /// returns (User, Password, Database)
-fn get_credentials() -> Result<[String; 3]> {
+fn get_credentials() -> Result<[String; 3], VarError> {
     use std::env::var;
 
     Ok([
